@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
+import './ProductDetails.dart';
+import './Providers/Carts.dart';
+import './Providers/Products.dart';
+import './screens/ShopingCart_screen.dart';
+import '../screens/Product_overview_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // Application name
-      title: 'Flutter Hello World',
-      // Application theme data, you can set the colors for the application as
-      // you want
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      // A widget which will be started on application startup
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => Products()),
+          ChangeNotifierProvider(create: (context) => Carts())
+        ],
+        child: MaterialApp(
+          // Application name
+          title: 'Flutter Hello World',
+          debugShowCheckedModeBanner: false,
+          // Application theme data, you can set the colors for the application as
+          // you want
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: Colors.deepOrange),
+            primarySwatch: Colors.deepOrange,
+          ),
+          // A widget which will be started on application startup
+          home: ProductOverview(),
+          initialRoute: '/Home',
 
-class MyHomePage extends StatelessWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});  
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // The title text which will be shown on the action bar
-        title: Text(title),
-      ),
-      body: Center(
-        child: Text(
-          'Hello, World!',
-        ),
-      ),
-    );
+          routes: {
+            '/Home': (context) => ProductOverview(),
+            'product-details': (context) => ProductDetails(),
+            'Shopping-screen': (context) => ShoppingScreen(),
+          },
+        ));
   }
 }
